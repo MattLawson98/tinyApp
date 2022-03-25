@@ -9,6 +9,7 @@
   <title>TinyApp</title>
 </head>
 <body>
+  <%- include('partials/_header') %>
   <main style="margin: 1em;">
     <h3>My URLs</h3>
     <table class="table">
@@ -16,18 +17,20 @@
         <tr>
           <th scope="col">Short URL</th>
           <th scope="col">Long URL</th>
+          <th scope="col">Edit</th>
+          <th scope="col">Delete</th>
         </tr>
       </thead>
       <tbody>
-        <%- include('partials/_header') %>
+        <% if (!user) { %>
+          <div class="alert alert-warning" role="alert">
+            Please <a href="/login" class="alert-link">login</a> or <a href="/register" class="alert-link">register</a>
+          </div>
+        <% } else { %>
         <% for(let url in urls) { %>
           <tr>
             <td><%= url %></td>
-            <td><%= urls[url] %></td>
-            <td>
-              <a hred ='#''>
-              </a>
-            </td>
+            <td><%= urls[url].longURL %></td>
             <td>
               <a href="/urls/<%= url %>">
                 <button type="button" class="btn-outline-primary">Edit</button>
@@ -36,8 +39,15 @@
             <td>
               <form method="POST" action="/urls/<%= url %>/delete">
               <button type="submit" class="btn btn-outline-danger">Delete</button>
+              </form>
             </td>
           </tr>
+        <% } %>
+        <% } %>
+        <% if (user) {%>
+          <div class="alert alert-info" role="alert">
+            Create a <a href="/urls/new" class="alert-info"><b>New Short URL</b></a>
+          </div>
         <% } %>
       </tbody>
     </table>
